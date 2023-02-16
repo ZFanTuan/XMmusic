@@ -41,7 +41,7 @@ function App() {
                   key={item.path}
                   onClick={(e) => handleRoute(item.path, index)}
                   style={
-                    CurrentIndex == index
+                    currentIndex == index
                       ? {
                         backgroundColor: "#000000",
                         backgroundImage: `url(${imgc})`,
@@ -54,7 +54,7 @@ function App() {
                   }
                 >
                   <span
-                    style={CurrentIndex == index ? { color: "#ffffff" } : {}}
+                    style={currentIndex == index ? { color: "#ffffff" } : {}}
                   >
                     {item.title}
                   </span>
