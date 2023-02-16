@@ -8,6 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 
 function App() {
   const [CurrentIndex, setCurrentIndex] = useState(1);
+  console.log(111);
 
   const naviget = useNavigate();
   const handleRoute = (path, index) => {
@@ -42,13 +43,13 @@ function App() {
                   style={
                     CurrentIndex == index
                       ? {
-                          backgroundColor: "#000000",
-                          backgroundImage: `url(${imgc})`,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPositionX: "-256px",
-                          backgroundPositionY: "-123px",
-                          backgroundSize: "320px",
-                        }
+                        backgroundColor: "#000000",
+                        backgroundImage: `url(${imgc})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPositionX: "-256px",
+                        backgroundPositionY: "-123px",
+                        backgroundSize: "320px",
+                      }
                       : {}
                   }
                 >
