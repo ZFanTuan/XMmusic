@@ -7,8 +7,7 @@ import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 function App() {
-  const [CurrentIndex, setCurrentIndex] = useState(1);
-  console.log(111);
+  const [currentIndex, setCurrentIndex] = useState(1);
 
   const naviget = useNavigate();
   const handleRoute = (path, index) => {
