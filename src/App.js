@@ -7,7 +7,7 @@ import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 function App() {
-  const [CurrentIndex, setCurrentIndex] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(1);
 
   const naviget = useNavigate();
   const handleRoute = (path, index) => {
@@ -40,7 +40,7 @@ function App() {
                   key={item.path}
                   onClick={(e) => handleRoute(item.path, index)}
                   style={
-                    CurrentIndex == index
+                    currentIndex == index
                       ? {
                           backgroundColor: "#000000",
                           backgroundImage: `url(${imgc})`,
@@ -53,7 +53,7 @@ function App() {
                   }
                 >
                   <span
-                    style={CurrentIndex == index ? { color: "#ffffff" } : {}}
+                    style={currentIndex == index ? { color: "#ffffff" } : {}}
                   >
                     {item.title}
                   </span>
