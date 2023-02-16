@@ -12,6 +12,7 @@ function App() {
   const naviget = useNavigate();
   const handleRoute = (path, index) => {
     naviget(path);
+    // setCurrentIndex(index);
     setCurrentIndex(index);
   };
 
