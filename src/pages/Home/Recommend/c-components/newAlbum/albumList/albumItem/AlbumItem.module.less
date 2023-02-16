@@ -1,0 +1,47 @@
+.album {
+  margin: 0 18px 0 5px;
+  // position: absolute;
+
+  .img {
+    position: relative;
+    cursor: pointer;
+
+    img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .mask {
+      width: 120px;
+      height: 100px;
+      // background-color: black;
+      background-image: url('../../../../../../../pictures/coverall.png');
+      position: absolute;
+      top: 0;
+      background-position: 0px -570px;
+    }
+  }
+
+  span {
+    display: block;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -moz-box;
+    -moz-line-clamp: 2;
+    -moz-box-orient: vertical;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+    font-size: 12px;
+    cursor: pointer;
+    color: #000000;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
