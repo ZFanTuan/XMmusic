@@ -39,7 +39,8 @@ const Home = memo(() => {
           </div>
         </div>
       </div>
-      <Outlet />
+        <Outlet />
+
       {/* <Footer /> */}
     </div>
 

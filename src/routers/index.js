@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router";
+import AlbumDet from "../pages/details/album-detail/AlbumDet";
 import Friend from "../pages/Friend";
 import Album from "../pages/Home/Album";
 import Artist from "../pages/Home/Artist";
@@ -29,37 +30,41 @@ const routes = [
       {
         path: '/home/recommend',
         element: <Recommend />,
-        title:'推荐'
+        title: '推荐'
       },
       {
         path: '/home/toplist',
         element: <TopList />,
-        title:'排行榜'
+        title: '排行榜'
 
       },
       {
         path: '/home/playlist',
         element: <PlayList />,
-        title:'歌单'
+        title: '歌单'
 
       },
       {
         path: '/home/radio',
         element: <Radio />,
-        title:'主播电台'
+        title: '主播电台'
 
       },
       {
         path: '/home/artist',
         element: <Artist />,
-        title:'歌手'
+        title: '歌手'
 
       },
       {
         path: '/home/album',
         element: <Album />,
-        title:'新碟上架'
-
+        title: '新碟上架'
+      },
+      {
+        path: '/home/detail/:id',
+        element: <AlbumDet />,
+        // notShow: true
       }
     ]
   },

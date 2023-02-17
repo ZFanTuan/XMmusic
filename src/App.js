@@ -9,7 +9,6 @@ import Footer from "./pages/Components/footer/Footer";
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(1);
-  console.log(111);
 
   const naviget = useNavigate();
   const handleRoute = (path, index) => {

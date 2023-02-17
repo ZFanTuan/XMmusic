@@ -2,13 +2,20 @@ import React, { memo } from 'react'
 import HotItemStyle from './HotItem.module.less'
 import play from '../../../../../../icons/play.svg'
 import hear from '../../../../../../icons/hear.svg'
+import { useNavigate } from 'react-router'
 
 const HotItem = memo((props) => {
   const { item } = props
+  const navigate = useNavigate()
+  console.log(item);
+
+  const handleToDetail = (e) => {
+    navigate(`/home/detail/${item.id}`)
+  }
   return (
     <div>
       <div className={HotItemStyle.listItem} key={item.coverImgUrl}>
-        <div className={HotItemStyle.img}>
+        <div className={HotItemStyle.img} onClick={handleToDetail}>
           <img src={item.coverImgUrl} alt="111" title={item.name} />
         </div>
         <div className={HotItemStyle.count}>
