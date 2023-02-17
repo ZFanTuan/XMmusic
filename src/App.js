@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useNavigate, useRoutes } from "react-router";
+import { useState } from "react";
+import { Route, Routes, useNavigate } from "react-router";
 import routes from "./routers/index";
 import AppStyle from "./App.module.less";
 import imgc from "./pictures/topbar.png";
