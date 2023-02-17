@@ -5,6 +5,7 @@ import AppStyle from "./App.module.less";
 import imgc from "./pictures/topbar.png";
 import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import Footer from "./pages/Components/footer/Footer";
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -89,6 +90,12 @@ function App() {
         </div>
       </div>
       <Routes>{getRoutes(routes)}</Routes>
+      <Footer /> 
+      <div className={AppStyle.playBar}>
+        <div className={AppStyle.rightBtn}>
+          <div></div>
+        </div>
+        播放蓝</div>
     </div>
   );
 }

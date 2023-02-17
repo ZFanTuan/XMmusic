@@ -40,7 +40,7 @@ const Home = memo(() => {
         </div>
       </div>
       <Outlet />
-      <Footer />
+      {/* <Footer /> */}
     </div>
 
   )
