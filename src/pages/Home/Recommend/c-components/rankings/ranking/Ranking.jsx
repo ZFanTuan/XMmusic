@@ -1,8 +1,11 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import RankingStyle from './Ranking.module.less'
 
 const Ranking = memo((props) => {
   const { ranking } = props
+  useEffect(() => {
+    console.log(ranking);
+  }, [ranking])
 
   return (
     <div className={RankingStyle.ranking}>

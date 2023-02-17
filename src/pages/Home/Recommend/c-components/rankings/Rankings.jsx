@@ -5,18 +5,18 @@ import Ranking from './ranking/Ranking'
 
 
 const Rankings = memo((props) => {
-  const { upRanking, newRanking, orgRanking } = props
-
-
+  const { ranking } = props
 
   return (
     <div>
       <div className={RankingsStyle.rankings}>
         <TitleBar title='榜单' />
         <div className={RankingsStyle.all}>
-          <Ranking ranking={upRanking} />
-          <Ranking ranking={newRanking} />
-          <Ranking ranking={orgRanking} />
+          {
+            ranking?.map(item => {
+              return <Ranking ranking={item.data} />
+            })
+          }
         </div>
       </div>
     </div>

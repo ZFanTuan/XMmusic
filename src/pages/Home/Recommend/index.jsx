@@ -12,11 +12,12 @@ const Recommend = memo(() => {
   const [banners, setBanners] = useState([])
   const [hot, setHot] = useState([])
   const [newAlbums, setNewAlbums] = useState([])
-  const [upRanking, setUpRanking] = useState([])
-  const [newRanking, setNewRanking] = useState([])
-  const [orgRanking, setOrgRanking] = useState([])
+  const [ranking, setRanking] = useState([])
+  // const [newRanking, setNewRanking] = useState([])
+  // const [orgRanking, setOrgRanking] = useState([])
   const [singers, setSingers] = useState([])
   const [djs, setDjs] = useState([])
+
 
   useEffect(() => {
     request.get('/banner').then(res => {
@@ -42,24 +43,32 @@ const Recommend = memo(() => {
 
   useEffect(() => {
     request.get('/toplist').then(res => {
-      const rankings = res.data.list.splice(0, 3)
-      const ids = []
-      for (let item of rankings) {
-        ids.push(item.id)
-      }
-      request.get(`/playlist/detail?id=${ids[0]}`).then(res => {
-        setUpRanking(res.data)
-      })
-      request.get(`/playlist/detail?id=${ids[1]}`).then(res => {
-        setNewRanking(res.data)
-      })
-      request.get(`/playlist/detail?id=${ids[2]}`).then(res => {
-        setOrgRanking(res.data)
-      })
+      const ids = res.data.list.splice(0, 3).map(item => item.id)
+      getRankings(ids)
+      // for (let item of ids) {
+      //   request.get(`/playlist/detail?id=${item.id}`).then(res => {
+      //     // setUpRanking(res.data)
+      //     results.push(res.data)
+      //   })
+      // }
+      // setRanking(results)
     })
   }, [])
 
-
+  function getRankings(ids) {
+    const requests = []
+    ids.forEach(id => {
+      requests.push(request.get(`/playlist/detail?id=${id}`))
+      // request.all(`/playlist/detail?id=${id}`).then(res => {
+      //   // setUpRanking(res.data)
+      //   results.push(res.data)
+      // })
+    });
+    Promise.all(requests).then((res) => {
+      console.log(res);
+      setRanking(res)
+    })
+  }
 
   useEffect(() => {
     request.get('/top/artists?offset=0&limit=5').then(res => {
@@ -72,7 +81,6 @@ const Recommend = memo(() => {
     request.get('/dj/toplist/popular?limit=5').then(res => {
       const djs = res.data.data.list
       setDjs(djs)
-      console.log(djs);
     })
   }, [])
 
@@ -81,12 +89,11 @@ const Recommend = memo(() => {
   return (
     <div className={RecommendStyle.recommend}>
       <Swiper banners={banners} />
-
       <div className={RecommendStyle.content}>
         <div className={RecommendStyle.songs}>
           <Hot hot={hot} />
           <New albums={newAlbums} />
-          <Rankings upRanking={upRanking} newRanking={newRanking} orgRanking={orgRanking} />
+          <Rankings ranking={ranking} />
         </div>
         <div className={RecommendStyle.singers}>
           <div className={RecommendStyle.login}>

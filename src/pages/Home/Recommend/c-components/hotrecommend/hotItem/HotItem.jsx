@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router'
 const HotItem = memo((props) => {
   const { item } = props
   const navigate = useNavigate()
-  console.log(item);
 
   const handleToDetail = (e) => {
     navigate(`/home/detail/${item.id}`)
