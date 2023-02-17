@@ -1,6 +1,7 @@
 import React, { memo, useState, } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import routes from '../../routers'
+import Footer from '../Components/footer/Footer'
 import HomeStyle from './Home.module.less'
 
 
@@ -39,6 +40,7 @@ const Home = memo(() => {
         </div>
       </div>
       <Outlet />
+      <Footer />
     </div>
 
   )
