@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Route, Routes, useNavigate } from "react-router";
+import { Slider } from 'antd';
 import routes from "./routers/index";
 import AppStyle from "./App.module.less";
 import imgc from "./pictures/topbar.png";
 import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Footer from "./pages/Components/footer/Footer";
+import PlayBar from "./pages/Components/playbar";
+
+
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -89,12 +93,8 @@ function App() {
         </div>
       </div>
       <Routes>{getRoutes(routes)}</Routes>
-      <Footer /> 
-      <div className={AppStyle.playBar}>
-        <div className={AppStyle.rightBtn}>
-          <div></div>
-        </div>
-        播放蓝</div>
+      <Footer />
+      <PlayBar />
     </div>
   );
 }
