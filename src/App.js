@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router";
-import { Slider } from 'antd';
 import routes from "./routers/index";
 import AppStyle from "./App.module.less";
 import imgc from "./pictures/topbar.png";
@@ -8,11 +7,14 @@ import { Button, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Footer from "./pages/Components/footer/Footer";
 import PlayBar from "./pages/Components/playbar";
+import Recommend from "./pages/Home/Recommend";
+
 
 
 
 function App() {
   const [currentIndex, setCurrentIndex] = useState(1);
+  const [songId, setSongId] = useState(0)
 
   const naviget = useNavigate();
   const handleRoute = (path, index) => {
@@ -23,6 +25,11 @@ function App() {
 
   function getRoutes(routes) {
     return routes.map((item) => {
+      if (item.path === '/home/recommend') {
+        return <Route path={item.path} element={<Recommend setSongId={setSongId} />} key={item.path}>
+          {item.children && item.children.length && getRoutes(item.children)}
+        </Route>
+      }
       return (
         <Route path={item.path} element={item.element} key={item.path}>
           {item.children && item.children.length && getRoutes(item.children)}
@@ -94,7 +101,7 @@ function App() {
       </div>
       <Routes>{getRoutes(routes)}</Routes>
       <Footer />
-      <PlayBar />
+      <PlayBar songId={songId} />
     </div>
   );
 }

@@ -64,7 +64,7 @@ const routes = [
       {
         path: '/home/detail/:id',
         element: <AlbumDet />,
-        // notShow: true
+        notShow: true
       }
     ]
   },

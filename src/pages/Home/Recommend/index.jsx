@@ -8,7 +8,9 @@ import New from './c-components/newAlbum/New';
 import Rankings from './c-components/rankings/Rankings';
 import SingerItem from './c-components/singerItem/SingerItem';
 
-const Recommend = memo(() => {
+const Recommend = memo((props) => {
+
+  const { setSongId } = props
   const [banners, setBanners] = useState([])
   const [hot, setHot] = useState([])
   const [newAlbums, setNewAlbums] = useState([])
@@ -93,7 +95,7 @@ const Recommend = memo(() => {
         <div className={RecommendStyle.songs}>
           <Hot hot={hot} />
           <New albums={newAlbums} />
-          <Rankings ranking={ranking} />
+          <Rankings ranking={ranking} setSongId={setSongId} />
         </div>
         <div className={RecommendStyle.singers}>
           <div className={RecommendStyle.login}>

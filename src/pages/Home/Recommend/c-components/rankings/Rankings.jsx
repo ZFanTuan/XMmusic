@@ -5,7 +5,7 @@ import Ranking from './ranking/Ranking'
 
 
 const Rankings = memo((props) => {
-  const { ranking } = props
+  const { ranking,setSongId } = props
 
   return (
     <div>
@@ -14,7 +14,7 @@ const Rankings = memo((props) => {
         <div className={RankingsStyle.all}>
           {
             ranking?.map(item => {
-              return <Ranking ranking={item.data} />
+              return <Ranking ranking={item.data} setSongId={setSongId} />
             })
           }
         </div>

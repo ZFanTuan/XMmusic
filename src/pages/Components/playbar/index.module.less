@@ -59,6 +59,12 @@
       .playInfo {
         width: 530px;
 
+        span {
+          color: #ffffff;
+          font-size: 12px;
+          margin-left: 8px;
+        }
+
         .wrap {
           height: 20px;
           display: flex;
@@ -68,24 +74,33 @@
           .out {
             height: 10px;
             width: 420px;
-            background-color: red;
+            position: relative;
+            background-color: #535353;
             border-radius: 5px;
 
 
             .dot {
               // display: inline-block;
-              float: left;
+              position: absolute;
               width: 10px;
               height: 10px;
-              background-color: black;
+              background-color: #ffffff;
               border-radius: 50%;
+              margin-left: 0;
             }
 
             .in {
-              height: 9px;
-              width: 399px;
-              background-color: yellow;
+              height: 10px;
+              // width: 400px;
+              background-color: #c70c0c;
               border-radius: 5px;
+            }
+          }
+
+          .time {
+            em {
+              color: #ffffff;
+              font-size: 12px;
             }
           }
 
