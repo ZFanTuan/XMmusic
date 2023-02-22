@@ -1,7 +1,9 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import PlayBarStyle from './index.module.less'
 import formatTime from '../../../formatTools/formatTime'
+import debounce from '../../../formatTools/debounce'
 
+import defaultImg from '../../../pictures/default_album.png'
 import prev from '../../../icons/prev.svg'
 import next from '../../../icons/next.svg'
 import barplay from '../../../icons/barplay.svg'
@@ -19,31 +21,33 @@ const PlayBar = memo((props) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [songInfo, setSongInfo] = useState({})
   const [rate, setRate] = useState(0)
-  const [currentTime,setCurrentTime] = useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [dotDown, setDotDown] = useState(false)
   const audioEl = useRef()
   const timerRef = useRef(null)
+  const preX = useRef(0)
 
   useEffect(() => {
     request.get(`/song/detail?ids=${songId}`).then(res => {
-      console.log(res.data.songs[0]);
       setSongInfo(res.data.songs[0])
     })
   }, [songId])
 
   useEffect(() => {
-
-    if (isPlaying) {
+    if (isPlaying && !dotDown) {
       timerRef.current = setInterval(() => {
-        const rate = (audioEl.current.currentTime / (songInfo?.dt / 1000)) * 100
+        console.log('在播放时', currentTime, audioEl.current.currentTime);
+
+        const rate = Number((audioEl.current.currentTime / (songInfo?.dt / 1000)) * 100)
         setCurrentTime(audioEl.current.currentTime)
         setRate(rate.toFixed(2))
-        console.log(audioEl.current.currentTime, songInfo?.dt / 1000, rate.toFixed(2));
+        // console.log(audioEl.current.currentTime, songInfo?.dt / 1000, rate.toFixed(2));
       }, 1000)
     } else {
       clearInterval(timerRef.current)
       timerRef.current = null
     }
-  }, [isPlaying])
+  }, [isPlaying, dotDown])
 
 
   const handlePlay = () => {
@@ -53,13 +57,51 @@ const PlayBar = memo((props) => {
     } else {
       audioEl.current.play()
     }
-
     setIsPlaying(pre => {
       return !pre
     })
-
-
   }
+  const handleDotDown = (e) => {
+    setDotDown(true)
+    preX.current = e.clientX
+  }
+  const handleDotMove = (event) => {
+    if (dotDown) {
+      const moveX = event.clientX - preX.current
+      preX.current = event.clientX
+      console.log(event.clientX, preX.current);
+      setRate(pre => {
+        if (pre > 99.5 && moveX > 0) {
+          return 100
+        } else if (pre < 0 && moveX < 0) {
+          return 0
+        }
+        return Number((pre * 1) + (moveX / 420) * 100)
+      })
+      console.log(rate, "rate");
+      setCurrentTime(Number((rate / 100) * (songInfo?.dt / 1000)))
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("mouseup", () => {
+      setDotDown(false)
+      if (dotDown) {
+        audioEl.current.currentTime = currentTime
+      }
+    })
+  }, [currentTime,dotDown])
+
+
+  const handleDotMoveTo = (event) => {
+    console.log('==', event.nativeEvent.offsetX);
+    const r = Number((event.nativeEvent.offsetX / 420) * 100)
+    setRate(r)
+    setCurrentTime(Number((r / 100) * (songInfo?.dt / 1000)))
+  }
+
+  useEffect(() => {
+    // console.log('外部', rate, Number(parseFloat(currentTime)).toFixed(2));
+  }, [rate])
 
   return (
     <div className={PlayBarStyle.playBar}>
@@ -67,21 +109,34 @@ const PlayBar = memo((props) => {
         <div></div>
       </div>
       <div className={PlayBarStyle.optinsBar}>
-        <audio ref={audioEl} src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}></audio>
+        <audio ref={audioEl}
+          src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}
+        ></audio>
         <div className={PlayBarStyle.leftIcons}>
           <img src={prev} />
           <img src={isPlaying ? puse : barplay} onClick={handlePlay} />
           <img src={next} />
         </div>
         <div className={PlayBarStyle.progress}>
-          <img src={songInfo?.al?.picUrl} />
-          <div className={PlayBarStyle.playInfo}>
+          <img src={songId ? songInfo?.al?.picUrl : defaultImg} />
+          <div className={PlayBarStyle.playInfo}
+            onMouseMove={handleDotMove}
+          >
             <span>{songInfo?.al?.name}</span>
             <span>{songInfo?.ar?.[0]?.name}</span>
             <div className={PlayBarStyle.wrap}>
-              <div className={PlayBarStyle.out}>
-                <span className={PlayBarStyle.dot} style={{ left: `calc(${rate}% - 5px)` }}></span>
-                <div className={PlayBarStyle.in} style={{ width: `${rate}%` }}></div>
+              <div className={PlayBarStyle.out}
+                // onClick={handleDotMoveTo}
+                onMouseMove={handleDotMove}
+              >
+                <span className={PlayBarStyle.dot}
+                  style={{ left: `calc(${rate}% - 5px)` }}
+                  onMouseDown={handleDotDown}
+                ></span>
+                <div className={PlayBarStyle.in}
+                  style={{ width: `${rate}%` }}
+
+                ></div>
               </div>
               <div className={PlayBarStyle.time}>
                 <em>{formatTime(currentTime)}</em>
