@@ -16,6 +16,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [songId, setSongId] = useState(0)
 
+
   const naviget = useNavigate();
   const handleRoute = (path, index) => {
     naviget(path);

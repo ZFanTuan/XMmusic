@@ -95,7 +95,7 @@ const Recommend = memo((props) => {
         <div className={RecommendStyle.songs}>
           <Hot hot={hot} />
           <New albums={newAlbums} />
-          <Rankings ranking={ranking} setSongId={setSongId} />
+          <Rankings ranking={ranking} setSongId={setSongId}/>
         </div>
         <div className={RecommendStyle.singers}>
           <div className={RecommendStyle.login}>

@@ -5,7 +5,7 @@ import Ranking from './ranking/Ranking'
 
 
 const Rankings = memo((props) => {
-  const { ranking,setSongId } = props
+  const { ranking, setSongId} = props
 
   return (
     <div>

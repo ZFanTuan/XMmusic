@@ -2,6 +2,7 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import PlayBarStyle from './index.module.less'
 import formatTime from '../../../formatTools/formatTime'
 import debounce from '../../../formatTools/debounce'
+import { useInterval } from 'ahooks'
 
 import defaultImg from '../../../pictures/default_album.png'
 import prev from '../../../icons/prev.svg'
@@ -18,15 +19,15 @@ import request from "../../../network/Reuest";
 
 const PlayBar = memo((props) => {
   const { songId } = props
-  const [isPlaying, setIsPlaying] = useState(false)
   const [songInfo, setSongInfo] = useState({})
   const [rate, setRate] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const [dotDown, setDotDown] = useState(false)
-  const [lock, setLock] = useState(false)
+  const [styles, setStyles] = useState({ width: "0px", height: "0px" })
+  const [isPlaying, setIsPlaying] = useState(false)
+
 
   const audioEl = useRef()
-  const timerRef = useRef(null)
   const preX = useRef(0)
 
   useEffect(() => {
@@ -35,25 +36,19 @@ const PlayBar = memo((props) => {
     })
   }, [songId])
 
-  useEffect(() => {
-    if (isPlaying && !dotDown) {
-      timerRef.current = setInterval(() => {
-        console.log('在播放时', currentTime, audioEl.current.currentTime);
-
-        const rate = Number((audioEl.current.currentTime / (songInfo?.dt / 1000)) * 100)
-        setCurrentTime(audioEl.current.currentTime)
-        setRate(rate.toFixed(2))
-        // console.log(audioEl.current.currentTime, songInfo?.dt / 1000, rate.toFixed(2));
-      }, 1000)
-    } else {
-      clearInterval(timerRef.current)
-      timerRef.current = null
+  useInterval(() => {
+    if (isPlaying && !dotDown && songInfo?.dt) {
+      console.log('在播放时', currentTime, audioEl.current.currentTime);
+      const rate = Number((audioEl.current.currentTime / (songInfo?.dt / 1000)) * 100)
+      setRate(rate.toFixed(2))
+      setCurrentTime(audioEl.current.currentTime * 1)
+      console.log('时长', songInfo?.dt);
     }
-  }, [isPlaying, dotDown])
+  }, 1000)
 
 
   const handlePlay = () => {
-    // console.log(audioEl.current);
+    console.log(audioEl);
     if (isPlaying) {
       audioEl.current.pause()
     } else {
@@ -74,7 +69,7 @@ const PlayBar = memo((props) => {
       console.log(event.clientX, preX.current);
       setRate(pre => {
         if (pre > 99.5 && moveX > 0) {
-          return 100
+          return currentTime / (songInfo?.dt / 1000)
         } else if (pre < 0 && moveX < 0) {
           return 0
         }
@@ -89,41 +84,57 @@ const PlayBar = memo((props) => {
       // setLock(true)
       audioEl.current.currentTime = currentTime
       setDotDown(false)
-      if (dotDown) {
-        audioEl.current.currentTime = currentTime
-      }
+      // if (dotDown) {
+      //   audioEl.current.currentTime = currentTime
+      // }
     })
   }, [currentTime, dotDown])
-
 
   const handleDotMoveTo = (event) => {
     // setLock(true)
     console.log(event);
 
-    const r = Number((event.nativeEvent.layerX / 420) * 100)
-    setRate(r)
+    const r = (event.nativeEvent.layerX / 420) * 100
+    setRate(r * 1)
     setCurrentTime(Number((r / 100) * (songInfo?.dt / 1000)))
     audioEl.current.currentTime = Number((r / 100) * (songInfo?.dt / 1000))
 
 
   }
 
+
+  const handleCatalogueClick = () => {
+    setStyles((pre) => {
+      if (pre.width === '0px') {
+        return { width: '300px', height: '300px' }
+      } else {
+        return { width: '0px', height: '0px' }
+      }
+    })
+  }
+
+
   useEffect(() => {
     console.log('外部', rate, Number(parseFloat(currentTime)).toFixed(2));
+    // if (currentTime) { setIsPlaying(true) }
+    // audioEl?.current?.loadedmetadata(() => setIsPlaying(true))
   }, [rate])
 
   return (
     <div className={PlayBarStyle.playBar}>
-      <div className={PlayBarStyle.rightBtn}>
+      <div className={PlayBarStyle.lockBtn}>
         <div></div>
       </div>
       <div className={PlayBarStyle.optinsBar}>
         <audio ref={audioEl}
           src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}
+          autoPlay
+          onLoadedData={e => setIsPlaying(true)}
         ></audio>
         <div className={PlayBarStyle.leftIcons}>
           <img src={prev} />
-          <img src={isPlaying ? puse : barplay} onClick={handlePlay} />
+          <img src={isPlaying
+            ? puse : barplay} onClick={handlePlay} />
           <img src={next} />
         </div>
         <div className={PlayBarStyle.progress}>
@@ -160,7 +171,12 @@ const PlayBar = memo((props) => {
           <img src={share} />
           <img src={volum} />
           <img src={repeat} />
-          <img src={catalogue} />
+          <img src={catalogue} onClick={handleCatalogueClick} />
+
+        </div>
+        <div className={PlayBarStyle.catalogue}
+          style={styles}
+        >
 
         </div>
       </div>

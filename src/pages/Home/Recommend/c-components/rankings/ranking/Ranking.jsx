@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import RankingStyle from './Ranking.module.less'
 
 const Ranking = memo((props) => {
-  const { ranking, setSongId } = props
+  const { ranking, setSongId} = props
 
 
   const getSongId = (id) => {
