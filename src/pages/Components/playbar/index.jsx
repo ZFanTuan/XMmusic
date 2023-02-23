@@ -23,6 +23,8 @@ const PlayBar = memo((props) => {
   const [rate, setRate] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const [dotDown, setDotDown] = useState(false)
+  const [lock, setLock] = useState(false)
+
   const audioEl = useRef()
   const timerRef = useRef(null)
   const preX = useRef(0)
@@ -83,24 +85,31 @@ const PlayBar = memo((props) => {
     }
   }
   useEffect(() => {
-    window.addEventListener("mouseup", () => {
+    window.addEventListener("mouseup", (event) => {
+      // setLock(true)
+      audioEl.current.currentTime = currentTime
       setDotDown(false)
       if (dotDown) {
         audioEl.current.currentTime = currentTime
       }
     })
-  }, [currentTime,dotDown])
+  }, [currentTime, dotDown])
 
 
   const handleDotMoveTo = (event) => {
-    console.log('==', event.nativeEvent.offsetX);
-    const r = Number((event.nativeEvent.offsetX / 420) * 100)
+    // setLock(true)
+    console.log(event);
+
+    const r = Number((event.nativeEvent.layerX / 420) * 100)
     setRate(r)
     setCurrentTime(Number((r / 100) * (songInfo?.dt / 1000)))
+    audioEl.current.currentTime = Number((r / 100) * (songInfo?.dt / 1000))
+
+
   }
 
   useEffect(() => {
-    // console.log('外部', rate, Number(parseFloat(currentTime)).toFixed(2));
+    console.log('外部', rate, Number(parseFloat(currentTime)).toFixed(2));
   }, [rate])
 
   return (
@@ -126,11 +135,11 @@ const PlayBar = memo((props) => {
             <span>{songInfo?.ar?.[0]?.name}</span>
             <div className={PlayBarStyle.wrap}>
               <div className={PlayBarStyle.out}
-                // onClick={handleDotMoveTo}
+                onClick={handleDotMoveTo}
                 onMouseMove={handleDotMove}
               >
                 <span className={PlayBarStyle.dot}
-                  style={{ left: `calc(${rate}% - 5px)` }}
+                  style={{ marginLeft: `calc(${rate}% - 5px)` }}
                   onMouseDown={handleDotDown}
                 ></span>
                 <div className={PlayBarStyle.in}
@@ -155,7 +164,7 @@ const PlayBar = memo((props) => {
 
         </div>
       </div>
-    </div>
+    </div >
   )
 })
 
