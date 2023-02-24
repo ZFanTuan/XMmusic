@@ -25,10 +25,14 @@ const PlayBar = memo((props) => {
   const [dotDown, setDotDown] = useState(false)
   const [styles, setStyles] = useState({ width: "0px", height: "0px" })
   const [isPlaying, setIsPlaying] = useState(false)
+  const [ids, setIds] = useState([])
 
 
   const audioEl = useRef()
   const preX = useRef(0)
+  const newInfos = useRef([])
+
+  const tracks = localStorage.getItem('track-queue')
 
   useEffect(() => {
     request.get(`/song/detail?ids=${songId}`).then(res => {
@@ -38,7 +42,7 @@ const PlayBar = memo((props) => {
 
   useInterval(() => {
     if (isPlaying && !dotDown && songInfo?.dt) {
-      console.log('在播放时', currentTime, audioEl.current.currentTime);
+      // console.log('在播放时', currentTime, audioEl.current.currentTime);
       const rate = Number((audioEl.current.currentTime / (songInfo?.dt / 1000)) * 100)
       setRate(rate.toFixed(2))
       setCurrentTime(audioEl.current.currentTime * 1)
@@ -102,23 +106,35 @@ const PlayBar = memo((props) => {
 
   }
 
-
   const handleCatalogueClick = () => {
     setStyles((pre) => {
       if (pre.width === '0px') {
-        return { width: '300px', height: '300px' }
+        return { width: '400px', height: '300px' }
       } else {
         return { width: '0px', height: '0px' }
       }
     })
   }
 
-
   useEffect(() => {
-    console.log('外部', rate, Number(parseFloat(currentTime)).toFixed(2));
-    // if (currentTime) { setIsPlaying(true) }
-    // audioEl?.current?.loadedmetadata(() => setIsPlaying(true))
-  }, [rate])
+    if (songInfo && Object.keys(songInfo).length) {
+      newInfos.current.push(songInfo)
+      let newArr = []
+      newInfos.current.forEach(item => {
+        if (newArr.findIndex(iten => iten?.id === item.id) < 0) {
+          newArr.push(item)
+        }
+      })
+      localStorage.setItem('track-queue', JSON.stringify(newArr))
+      console.log(newArr, "-----------");
+    }
+  }, [songInfo])
+
+  const cleanAll = () => {
+    localStorage.setItem('track-queue', JSON.stringify([]))
+  }
+  console.log(JSON.parse(tracks));
+
 
   return (
     <div className={PlayBarStyle.playBar}>
@@ -177,7 +193,18 @@ const PlayBar = memo((props) => {
         <div className={PlayBarStyle.catalogue}
           style={styles}
         >
-
+          <div className={PlayBarStyle.trackHeader}>
+            <span onClick={cleanAll}>清除全部</span>
+          </div>
+          <div className={PlayBarStyle.trackContent}>
+            {
+              JSON.parse(tracks)?.map(item => {
+                return <div className={PlayBarStyle.trackItem}>
+                  <span>{item.name}</span>
+                </div>
+              })
+            }
+          </div>
         </div>
       </div>
     </div >
