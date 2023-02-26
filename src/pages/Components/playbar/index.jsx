@@ -25,7 +25,7 @@ const PlayBar = memo((props) => {
   const [dotDown, setDotDown] = useState(false)
   const [styles, setStyles] = useState({ width: "0px", height: "0px" })
   const [isPlaying, setIsPlaying] = useState(false)
-  const [ids, setIds] = useState([])
+  const [currentIndex, setCurrentIndex] = useState([])
 
 
   const audioEl = useRef()
@@ -130,6 +130,11 @@ const PlayBar = memo((props) => {
     }
   }, [songInfo])
 
+
+  const trackItemClick = (index) => {
+    setCurrentIndex(index)
+  }
+
   const cleanAll = () => {
     localStorage.setItem('track-queue', JSON.stringify([]))
   }
@@ -198,9 +203,13 @@ const PlayBar = memo((props) => {
           </div>
           <div className={PlayBarStyle.trackContent}>
             {
-              JSON.parse(tracks)?.map(item => {
-                return <div className={PlayBarStyle.trackItem}>
-                  <span>{item.name}</span>
+              JSON.parse(tracks)?.map((item, index) => {
+                return <div className={PlayBarStyle.trackItem}
+                  onClick={e => trackItemClick(index)}
+                  style={{ backgroundColor: currentIndex === index && "#0f0f0f" }}>
+                  <span className={PlayBarStyle.ItemName}>{item.name}</span>
+                  <span className={PlayBarStyle.ItemArName}>{item.ar[0].name}</span>
+                  <span className={PlayBarStyle.ItemTime}>{formatTime(item.dt)}</span>
                 </div>
               })
             }

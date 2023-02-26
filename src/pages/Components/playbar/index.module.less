@@ -125,37 +125,62 @@
 
 
     .catalogue {
+      overflow: hidden;
+      color: #ffffff;
+
+
       // height: 300px;
       // width: 500px;
       position: absolute;
-      bottom: 48px;
-      right: 20px;
+      bottom: 77px;
+      right: 10px;
       transition: all .4s;
-      background-color: red;
+      // background-color: red;
 
       .trackHeader {
         height: 30px;
-        background-color: pink;
-        span{
+        // overflow: hidden;
+        background-color: #1d1d1d;
+        // background-color: #fff;
+        border-bottom: 1px solid #050505;
+
+        span {
           text-align: center;
           line-height: 30px;
           font-size: 12px;
           margin-left: 320px;
           cursor: pointer;
-          &:hover{
+
+          &:hover {
             text-decoration: underline;
           }
         }
       }
 
       .trackContent {
+        background-color: #171717;
+        height: 299px;
 
         .trackItem {
           height: 30px;
-          background-color: #fff;
+          // background-color: #fff;
 
-          span{
+          span {
             font-size: 12px;
+            cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+          .ItemName{
+            margin-left: 20px;
+          }
+          .ItemArName{
+            margin-left: 150px;
+            margin-right: 20px;
+          }
+          .ItemTime{
+            // margin-right: 20px;
           }
         }
       }
